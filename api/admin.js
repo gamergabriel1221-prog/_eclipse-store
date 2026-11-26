@@ -72,6 +72,14 @@ const actions = {
     const { error } = await db().from('product_stock').delete().eq('id', id).eq('status', 'available');
     if (error) throw error; return { ok: true };
   },
+  async reviews() {
+    const { data, error } = await db().from('reviews').select('id,author,rating,body,created_at').order('created_at', { ascending: false }).limit(100);
+    if (error) throw error; return { reviews: data };
+  },
+  async review_delete({ id }) {
+    const { error } = await db().from('reviews').delete().eq('id', id);
+    if (error) throw error; return { ok: true };
+  },
   async orders() {
     const { data, error } = await db().from('orders').select('id,email,status,total,created_at,paid_at,note,order_items(product_name)').order('created_at', { ascending: false }).limit(100);
     if (error) throw error; return { orders: data };
